@@ -3,6 +3,8 @@ package com.pinnacle.bus_booking.Controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,22 +25,26 @@ public class FareController {
     private FareService fareService;
 
     @GetMapping
-    public List<Fare> getAllFares() {
-        return fareService.getAllFares();
+    public ResponseEntity<List<Fare>> getAllFares() {
+        List<Fare> fares = fareService.getAllFares();
+        return new ResponseEntity<>(fares, HttpStatus.OK);
     }
 
     @PostMapping
-    public Fare saveFares(@RequestBody Fare fare) {
-        return fareService.saveFares(fare);
+    public ResponseEntity<Fare> saveFares(@RequestBody Fare fare) {
+        Fare savedFare = fareService.saveFares(fare);
+        return new ResponseEntity<>(savedFare, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public Fare updateFares(@RequestBody Fare fare, @PathVariable String id) {
-        return fareService.updateFares(fare, id);
+    public ResponseEntity<Fare> updateFares(@RequestBody Fare fare, @PathVariable String id) {
+        Fare updatedFare = fareService.updateFares(fare, id);
+        return new ResponseEntity<>(updatedFare, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteFare(@PathVariable String id) {
+    public ResponseEntity<Void> deleteFare(@PathVariable String id) {
         fareService.deleteFare(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

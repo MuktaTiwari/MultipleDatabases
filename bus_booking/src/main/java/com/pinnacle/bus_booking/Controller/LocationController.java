@@ -3,6 +3,8 @@ package com.pinnacle.bus_booking.Controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,24 +25,27 @@ public class LocationController {
     private LocationService locationService;
 
     @GetMapping
-    public List<Locations> getAllLocation(){
-        return locationService.getAllLocation();
-
+    public ResponseEntity<List<Locations>> getAllLocation() {
+        List<Locations> locations = locationService.getAllLocation();
+        return new ResponseEntity<>(locations, HttpStatus.OK);
     }
 
     @PostMapping
-    public Locations saveLocations(@RequestBody Locations locations){
-        return locationService.saveLocation(locations);
+    public ResponseEntity<Locations> saveLocations(@RequestBody Locations locations) {
+        Locations savedLocation = locationService.saveLocation(locations);
+        return new ResponseEntity<>(savedLocation, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public Locations updateLocations(@PathVariable int id, @RequestBody Locations locations) {
-        locations.setId(id); 
-        return locationService.updateLocations(locations);
+    public ResponseEntity<Locations> updateLocations(@PathVariable int id, @RequestBody Locations locations) {
+        locations.setId(id);
+        Locations updatedLocation = locationService.updateLocations(locations);
+        return new ResponseEntity<>(updatedLocation, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteLocations(@PathVariable int id) {
-        locationService.deleteLocations(id);  
+    public ResponseEntity<Void> deleteLocations(@PathVariable int id) {
+        locationService.deleteLocations(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
